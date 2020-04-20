@@ -1,0 +1,35 @@
+CREATE TABLE country (
+country_id smallint(5) unsigned primary key auto_increment not null,
+country varchar(50) not null,
+last_update timestamp default current_timestamp on update current_timestamp not null
+);
+
+CREATE TABLE city (
+city_id smallint(5) unsigned primary key auto_increment not null,
+city varchar(50) not null,
+country_id smallint(5) unsigned not null,
+last_update timestamp default current_timestamp on update current_timestamp not null
+);
+
+mysql -uroot studykasus < C:\Users\FIND\Downloads\country.sql
+mysql -uroot studykasus < C:\Users\FIND\Downloads\city.sql
+
+create user 'Alan@localhost' identified by 'ujianmysql';
+
+grant all on studykasus.country to Alan@localhost;
+grant all on studykasus.city to Alan@localhost;
+
+SELECT country as `Country's Name`, last_update as `Last Modified` FROM country ORDER BY country ASC limit 30;
+
+SELECT city as `City's Name`, last_update as `Last Modified` FROM city ORDER BY city DESC limit 20;
+
+SELECT country.country as `Country`, city.city as `Part of City`
+FROM country, city
+WHERE country.country_id = city.country_id LIMIT 10;
+
+SELECT country.country as `Country`, city.city as `Part of City` INTO OUTFILE 'C:\\xampp\\mysql\\file_belajar\\country.txt'
+FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+FROM country, city
+WHERE country.country_id = city.country_id 
+LIMIT 10;
